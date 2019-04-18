@@ -3,8 +3,8 @@
 buildscript {
     
     repositories {
-        google()
         jcenter()
+        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0'
@@ -17,11 +17,33 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
         jcenter()
+        maven { url "https://jitpack.io" }
+        google()
     }
+
+    apply plugin: 'checkstyle'
+
+    task checkstyle(type: Checkstyle) {
+        configFile file("${project.rootDir}/checkstyle.xml")
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+
+        classpath = files()
+    }
+
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+//检查代码规范
+apply plugin: 'checkstyle'
+
+checkstyle {
+    configFile rootProject.file('checkstyle.xml')
+    showViolations true
+}
+
