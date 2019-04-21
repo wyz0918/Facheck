@@ -88,46 +88,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                     HttpConection.sendPostRequest("http://172.26.93.218:5000/login", userobject.toString(), new Callback() {
                         @Override
-                        public void onFailure(Call call, IOException e) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(LoginActivity.this,"请求失败",Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        public void onFailure(Call call, IOException e) { infomation("请求失败");
                         }
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             if(response.isSuccessful()){
-                                String code=response.body().string();
-                                if(code=="100"){
+                                String code=null;
+                                try {
+                                    JSONObject job=new JSONObject(response.body().string());
+                                    code=job.getString("state");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                if(code.equals("0100")){
                                     Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                                     startActivity(intent);
                                 }
-                                else if(code=="101")
+                                else if(code.equals("0101"))
                                 {
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(LoginActivity.this,"密码错误",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                    infomation("密码错误");
                                 }
-                                else;
+                                else{infomation("未知情况错误"); }
                             }
                             else
                             {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(LoginActivity.this,"服务器出错",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                                if(response.code()==500)
+                                    infomation("服务器出错");
+                                else infomation("客户端出错");
                             }
                         }
                     });
                 }
                 break;
         }
+    }
+    private void infomation(final String msg){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(LoginActivity.this,msg,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

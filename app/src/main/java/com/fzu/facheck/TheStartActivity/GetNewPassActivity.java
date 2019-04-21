@@ -71,16 +71,31 @@ public class GetNewPassActivity extends AppCompatActivity implements View.OnClic
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 if(response.isSuccessful()){
-                                    String code=response.body().string();
-                                    if(code=="")
+                                    String code=null;
+                                    JSONObject job= null;
+                                    try {
+                                        job = new JSONObject(response.body().string());
+                                        code=job.getString("state");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if(code=="0400")
                                     {
                                         infomation("修改密码成功");
                                         finish();
                                     }
-                                    else
+                                    else if(code=="0500")
                                     {
                                         infomation("修改失败");
                                     }
+                                    else{
+                                        infomation("未知情况错误");
+                                    }
+                                }
+                                else{
+                                    if(response.code()==500)
+                                        infomation("服务器出错");
+                                    else infomation("客户端出错");
                                 }
                             }
                         });
@@ -156,7 +171,51 @@ public class GetNewPassActivity extends AppCompatActivity implements View.OnClic
                     Toast.makeText(GetNewPassActivity.this,"密码确认错误",Toast.LENGTH_SHORT).show();
                 else
                 {
-                    SMSSDK.submitVerificationCode("86",pt,vr);
+                    //SMSSDK.submitVerificationCode("86",pt,vr);
+                    JSONObject userobject=new JSONObject();
+                    try {
+                        userobject.put("phoneNumber",photoText.getText().toString());
+                        userobject.put("password",newpassText1.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    HttpConection.sendPostRequest("http://172.26.93.218:5000/reset_password", userobject.toString(), new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            infomation("请求失败");
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if(response.isSuccessful()){
+                                String code=null;
+                                JSONObject job= null;
+                                try {
+                                    job = new JSONObject(response.body().string());
+                                    code=job.getString("state");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                if(code.equals("0400"))
+                                {
+                                    infomation("修改密码成功");
+                                    finish();
+                                }
+                                else if(code.equals("0401"))
+                                {
+                                    infomation("修改失败");
+                                }
+                                else{
+                                    infomation("未知情况错误");
+                                }
+                            }
+                            else{
+                                if(response.code()==500)
+                                    infomation("服务器出错");
+                                else infomation("客户端出错");
+                            }
+                        }
+                    });
                 }
                 break;
         }

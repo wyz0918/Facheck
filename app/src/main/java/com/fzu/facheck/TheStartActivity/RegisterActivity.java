@@ -67,13 +67,19 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         HttpConection.sendPostRequest("http://172.26.93.218:5000/register", userobject.toString(), new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                e.printStackTrace();
+                                infomation("请求失败");
                             }
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 if(response.isSuccessful())
                                 {
-                                    String code=response.body().string();
+                                    String code=null;
+                                    try {
+                                        JSONObject job=new JSONObject(response.body().string());
+                                        code=job.getString("state");
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                     if(code=="000")
                                     {
                                         infomation("注册成功");
@@ -84,8 +90,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                         infomation("注册失败,账号已存在");
                                     }
                                     else{
-                                        infomation(code);
+                                        infomation("未知情况错误");
                                     }
+                                }
+                                else
+                                {
+                                    if(response.code()==500)
+                                        infomation("服务器出错");
+                                    else infomation("客户端出错");
                                 }
                             }
                         });
@@ -142,25 +154,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     Toast.makeText(RegisterActivity.this,"密码不能为空",Toast.LENGTH_SHORT).show();
                 else if(passwordText.getText().toString().length()<6)
                     Toast.makeText(RegisterActivity.this,"密码过短",Toast.LENGTH_SHORT).show();
-//                else if(TextUtils.isEmpty(pt))
-//                    Toast.makeText(RegisterActivity.this,"手机号不能为空",Toast.LENGTH_SHORT).show();
-//                else if(TextUtils.isEmpty(vr))
-//                    Toast.makeText(RegisterActivity.this,"验证码不能为空",Toast.LENGTH_SHORT).show();
-//                else if(pt.length()<11)
-//                    Toast.makeText(RegisterActivity.this,"手机号错误",Toast.LENGTH_SHORT).show();
+                else if(TextUtils.isEmpty(pt))
+                    Toast.makeText(RegisterActivity.this,"手机号不能为空",Toast.LENGTH_SHORT).show();
+                else if(TextUtils.isEmpty(vr))
+                    Toast.makeText(RegisterActivity.this,"验证码不能为空",Toast.LENGTH_SHORT).show();
+                else if(pt.length()<11)
+                    Toast.makeText(RegisterActivity.this,"手机号错误",Toast.LENGTH_SHORT).show();
                 else
                 {
+                    //SMSSDK.submitVerificationCode("86",pt,vr);
                     JSONObject userobject=new JSONObject();
                     try {
-//                        userobject.put("username",usernameText.getText().toString());
-                        userobject.put("username","小明");
+                        userobject.put("username",usernameText.getText().toString());
                         userobject.put("password",passwordText.getText().toString());
                         userobject.put("phoneNumber",photoText.getText().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    //SMSSDK.submitVerificationCode("86",pt,vr);
-                    Log.d("RegisterActivity",userobject.toString());
                     HttpConection.sendPostRequest("http://172.26.93.218:5000/register", userobject.toString(), new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
@@ -170,22 +180,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         public void onResponse(Call call, Response response) throws IOException {
                             if(response.isSuccessful())
                             {
-                                String code=response.body().string();
-                                if(code=="000")
+                                String code=null;
+                                try {
+                                    JSONObject job=new JSONObject(response.body().string());
+                                    code=job.getString("state");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                if(code.equals("0000"))
                                 {
                                     infomation("注册成功");
                                     finish();
                                 }
-                                else if(code=="001")
+                                else if(code.equals("0001"))
                                 {
                                     infomation("注册失败,账号已存在");
                                 }
-                                else;
+                                else{
+                                    infomation("未知情况错误");
+                                }
                             }
                             else
                             {
                                 if(response.code()==500)
-                                infomation("服务器出错");
+                                    infomation("服务器出错");
                                 else infomation("客户端出错");
                             }
                         }
