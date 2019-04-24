@@ -1,11 +1,60 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular LiveApi-level can go here. -->
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <!-- Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+
+    </style>
+
+
+    <!--&lt;!&ndash; 主界面 设置Style &ndash;&gt;-->
+    <!--<style name="MainActivityColorTranslucentTheme" parent="@style/BaseAppTheme" />-->
+
+
+    <!--&lt;!&ndash;离线缓存进度条Style&ndash;&gt;-->
+    <!--<style name="NumberProgressBar_Beauty_Red">-->
+        <!--<item name="android:layout_height">wrap_content</item>-->
+        <!--<item name="android:layout_width">match_parent</item>-->
+        <!--<item name="progress_max">100</item>-->
+        <!--<item name="progress_current">0</item>-->
+        <!--<item name="progress_unreached_color">@color/gray_light</item>-->
+        <!--<item name="progress_reached_color">@color/colorPrimary</item>-->
+        <!--<item name="progress_text_size">10sp</item>-->
+        <!--<item name="progress_text_color">#FF3D7F</item>-->
+        <!--<item name="progress_reached_bar_height">20dp</item>-->
+        <!--<item name="progress_unreached_bar_height">20dp</item>-->
+    <!--</style>-->
+
+    <!--<style name="CollapsingToolbarTitleStyle.About" parent="@android:style/TextAppearance">-->
+        <!--<item name="android:textColor">@android:color/transparent</item>-->
+    <!--</style>-->
+
+    <!--&lt;!&ndash;Theme Dialog style&ndash;&gt;-->
+    <!--<style name="AppTheme.AppCompat.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert">-->
+        <!--<item name="android:windowMinWidthMinor">90%</item>-->
+        <!--<item name="android:windowMinWidthMajor">90%</item>-->
+        <!--<item name="android:maxWidth">1080dp</item>-->
+    <!--</style>-->
+
+    <!--&lt;!&ndash;ToolBar TextSize style&ndash;&gt;-->
+    <!--<style name="ToolBar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">-->
+        <!--<item name="android:textSize">16sp</item>-->
+    <!--</style>-->
+
+    <!--ToolBar TextSize style-->
+    <style name="ToolBar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">16sp</item>
+
     </style>
 
 </resources>
