@@ -56,5 +56,8 @@
         <item name="android:textSize">16sp</item>
 
     </style>
-
+    <style name="customHintStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14dp</item>
+    </style>
 </resources>
