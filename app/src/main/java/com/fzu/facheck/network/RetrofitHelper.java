@@ -2,6 +2,7 @@ package com.fzu.facheck.network;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.fzu.facheck.FacheckAPP;
+import com.fzu.facheck.network.api.LoginServer;
 import com.fzu.facheck.network.api.RollCallService;
 import com.fzu.facheck.network.auxiliary.ApiConstants;
 import com.fzu.facheck.utils.CommonUtil;
@@ -71,7 +72,10 @@ public class RetrofitHelper {
 //    public static Im9Service getIm9API() {
 //        return createApi(Im9Service.class, ApiConstants.IM9_BASE_URL);
 //    }
-
+    //注册、登入、忘记密码服务
+    public static LoginServer getLoAPI(){
+        return createApi(LoginServer.class,"http://172.26.93.218:5000");
+    }
     /**
      * 根据传入的baseUrl和api创建retrofit
      */
