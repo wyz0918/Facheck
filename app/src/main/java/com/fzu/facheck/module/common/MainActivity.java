@@ -1,14 +1,14 @@
-package com.fzu.facheck;
+package com.fzu.facheck.module.common;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
-import com.fzu.facheck.home.HomePageFragment;
+import com.fzu.facheck.module.home.HomePageFragment;
 
 import butterknife.BindView;
 
