@@ -101,6 +101,7 @@ public class LoginActivity extends RxBaseActivity {
                                 }
                                 @Override
                                 public void onNext(StateInfo stateInfo) {
+
                                     if(stateInfo.code.equals("0100")){
                                         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                                         startActivity(intent);
@@ -108,7 +109,7 @@ public class LoginActivity extends RxBaseActivity {
                                     else if(stateInfo.code.equals("0101"))
                                         ToastUtil.showShort(LoginActivity.this,"密码错误");
                                     else
-                                        ToastUtil.showShort(LoginActivity.this,"未知情况错误");
+                                        ToastUtil.showShort(LoginActivity.this,"账号不存在");
                                 }
                             });
                 }
