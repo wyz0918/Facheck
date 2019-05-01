@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fzu.facheck.MainActivity;
+import com.fzu.facheck.module.common.MainActivity;
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
 import com.fzu.facheck.entiy.logininfo.StateInfo;
@@ -101,6 +101,7 @@ public class LoginActivity extends RxBaseActivity {
                                 }
                                 @Override
                                 public void onNext(StateInfo stateInfo) {
+
                                     if(stateInfo.code.equals("0100")){
                                         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                                         startActivity(intent);
@@ -108,7 +109,7 @@ public class LoginActivity extends RxBaseActivity {
                                     else if(stateInfo.code.equals("0101"))
                                         ToastUtil.showShort(LoginActivity.this,"密码错误");
                                     else
-                                        ToastUtil.showShort(LoginActivity.this,"未知情况错误");
+                                        ToastUtil.showShort(LoginActivity.this,"账号不存在");
                                 }
                             });
                 }

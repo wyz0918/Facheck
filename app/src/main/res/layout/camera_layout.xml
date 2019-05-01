@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:layout_weight="8">
+        <com.fzu.facheck.widget.sectioned.AutoFitTextureView
+            android:id="@+id/preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textColor="@color/white"
+        android:text="请您将正脸对准摄像头"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:layout_weight="0.5"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textColor="@color/white"
+        android:text="保证完整的脸部处于可视区域"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:layout_weight="0.5"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimary"
+        android:layout_weight="1.2">
+        <ImageView
+            android:id="@+id/take_p"
+            android:layout_width="80dp"
+            android:layout_marginBottom="2dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/take"
+            android:layout_height="80dp" />
+        <ImageView
+            android:id="@+id/cancel_s"
+            android:layout_width="80dp"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="25dp"
+            android:src="@drawable/cancel"
+            android:layout_marginBottom="2dp"
+            android:layout_alignParentRight="true"
+            android:layout_height="80dp" />
+        <ImageView
+            android:id="@+id/commit_p"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ok"
+            android:layout_marginBottom="2dp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="25dp"/>
+        <TextView
+            android:id="@+id/cancel_t"
+            android:layout_width="wrap_content"
+            android:text="取消"
+            android:textSize="28dp"
+            android:layout_marginBottom="2dp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+</LinearLayout>
