@@ -3,4 +3,12 @@
     <string name="title_home">点名</string>
     <string name="title_class">班级</string>
     <string name="title_myinfo">我的</string>
+    <string name="class_I_jointed">我加入的班级</string>
+    <string name="not_signed_in">未签到</string>
+    <string name="signed_in">已签到</string>
+
+    <string name="class_I_created">我创建的班级</string>
+    <string name="roll_call_on">开始点名</string>
+    <string name="roll_call_off">点名结束</string>
+
 </resources>

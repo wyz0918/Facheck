@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fzu.facheck">
+
+
+    <!-- 用户权限设置 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" />
@@ -27,19 +33,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".module.common.StartActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-             <!--<intent-filter>-->
-             <!--<action android:name="android.intent.action.MAIN" />-->
-
-
-             <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".module.common.LoginActivity" />
         <activity android:name=".module.common.RegisterActivity" />
-        <activity android:name=".module.common.GetNewPassActivity" />
-        <activity android:name=".module.common.CommonActivity"></activity>
-        <activity android:name=".module.common.CameraActivity"/>
+        <activity android:name=".module.common.GetNewPassActivity"></activity>
     </application>
 
 </manifest>

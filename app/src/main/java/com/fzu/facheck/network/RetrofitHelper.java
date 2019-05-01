@@ -3,12 +3,13 @@ package com.fzu.facheck.network;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.fzu.facheck.FacheckAPP;
 import com.fzu.facheck.network.api.LoginServer;
+import com.fzu.facheck.network.api.RollCallService;
+import com.fzu.facheck.network.auxiliary.ApiConstants;
 import com.fzu.facheck.utils.CommonUtil;
 
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import okhttp3.Cache;
 import okhttp3.CacheControl;
@@ -33,18 +34,12 @@ public class RetrofitHelper {
     static {
         initOkHttpClient();
     }
-//
-//    public static LiveService getLiveAPI() {
-//        return createApi(LiveService.class, ApiConstants.LIVE_BASE_URL);
-//    }
-//
-//    public static BiliAppService getBiliAppAPI() {
-//        return createApi(BiliAppService.class, ApiConstants.APP_BASE_URL);
-//    }
-//
-//    public static BiliApiService getBiliAPI() {
-//        return createApi(BiliApiService.class, ApiConstants.API_BASE_URL);
-//    }
+
+    public static RollCallService getRollCallAPI() {
+        return createApi(RollCallService.class, ApiConstants.ROLLCALL_URL);
+    }
+
+
 //
 //    public static BiliGoService getBiliGoAPI() {
 //        return createApi(BiliGoService.class, ApiConstants.BILI_GO_BASE_URL);
@@ -112,9 +107,9 @@ public class RetrofitHelper {
                             .addNetworkInterceptor(new CacheInterceptor())
                             .addNetworkInterceptor(new StethoInterceptor())
                             .retryOnConnectionFailure(true)
-                            .connectTimeout(30, TimeUnit.SECONDS)
-                            .writeTimeout(20, TimeUnit.SECONDS)
-                            .readTimeout(20, TimeUnit.SECONDS)
+//                            .connectTimeout(30, TimeUnit.SECONDS)
+//                            .writeTimeout(20, TimeUnit.SECONDS)
+//                            .readTimeout(20, TimeUnit.SECONDS)
                             .build();
                 }
             }
