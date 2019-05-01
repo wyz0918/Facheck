@@ -5,7 +5,6 @@
 
     <!-- 用户权限设置 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -20,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".module.common.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -41,6 +40,8 @@
         </activity>
         <activity android:name=".module.common.LoginActivity" />
         <activity android:name=".module.common.RegisterActivity" />
+        <activity android:name=".module.common.CameraActivity"/>
+        <activity android:name=".module.common.CommonActivity"/>
         <activity android:name=".module.common.GetNewPassActivity"></activity>
     </application>
 

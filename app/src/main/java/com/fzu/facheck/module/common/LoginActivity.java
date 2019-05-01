@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fzu.facheck.MainActivity;
+import com.fzu.facheck.module.common.MainActivity;
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
 import com.fzu.facheck.entiy.logininfo.StateInfo;

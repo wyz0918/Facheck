@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.fzu.facheck.MainActivity;
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
 import com.fzu.facheck.entiy.logininfo.StateInfo;
@@ -94,8 +93,7 @@ public class RegisterActivity extends RxBaseActivity {
                                     public void onNext(StateInfo stateInfo) {
                                         if (stateInfo.code.equals("0000")) {
                                             ToastUtil.showShort(RegisterActivity.this, "注册成功");
-                                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                                            startActivity(intent);
+                                            finish();
                                         } else if (stateInfo.code.equals("0001"))
                                             ToastUtil.showShort(RegisterActivity.this, "账号已存在");
                                         else
