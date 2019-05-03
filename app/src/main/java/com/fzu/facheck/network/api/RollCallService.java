@@ -1,14 +1,12 @@
 package com.fzu.facheck.network.api;
 
 import com.fzu.facheck.entity.RollCall.RollCallInfo;
+import com.fzu.facheck.entity.RollCall.RollCallResult;
+import com.fzu.facheck.entity.RollCall.StartRollCallInfo;
 
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -22,7 +20,19 @@ public interface RollCallService {
     /**
      * 点名班级信息
      */
-    @POST("/{cid}")
-    Observable<RollCallInfo> getRollCallInfoById(@Path("cid") String cid, @Body RequestBody requestBody);
+    @POST("/get_user_class_info")
+    Observable<RollCallInfo> getRollCallInfoById( @Body RequestBody requestBody);
+
+    /**
+     * 点名人相关信息
+     */
+    @POST("/start_roll_call")
+    Observable<StartRollCallInfo> getStartRollCallById(@Body RequestBody requestBody);
+
+    /**
+     * 点名结果信息
+     */
+    @POST("/get_single_class_sign_in_info")
+    Observable<RollCallResult> getRollCallResultById(@Body RequestBody requestBody);
 
 }

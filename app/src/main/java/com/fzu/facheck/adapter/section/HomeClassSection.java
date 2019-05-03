@@ -1,18 +1,37 @@
 package com.fzu.facheck.adapter.section;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.fzu.facheck.R;
 import com.fzu.facheck.entity.RollCall.RollCallInfo;
+import com.fzu.facheck.module.home.RollCallResultActivity;
+import com.fzu.facheck.network.RetrofitHelper;
+import com.fzu.facheck.utils.RxTimerUtil;
 import com.fzu.facheck.widget.sectioned.StatelessSection;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class HomeClassSection extends StatelessSection {
     private List<RollCallInfo.ClassInfoBean.JoinedClassDataBean> jointedData;
@@ -20,17 +39,30 @@ public class HomeClassSection extends StatelessSection {
     private String type;
     private static final String JOINTED_DATA = "jointed_data";
     private static final String CREATE_DATA = "created_data";
+    private Context mContext;
+    private ArrayList<String> minutes = new ArrayList<>();
+    private int rollCallTime;
+    private OptionsPickerView pvOptions;
+    private int mBtn_status = 0;
+    private JSONObject jsonObject;
+
+    private AMapLocation mLocation; //当前点的位置
+    private AMapLocationClient mLocationClient;
+    private AMapLocationClientOption mLocationOption;
+
+    private String mRecordId;
 
 
 
-
-    public HomeClassSection( RollCallInfo.ClassInfoBean data,String type) {
+    public HomeClassSection( RollCallInfo.ClassInfoBean data,String type,Context context) {
         super(R.layout.layout_home_class_header, R.layout.layout_home_class);
         this.jointedData = data.getJoinedClassData();
         this.createdData = data.getManagedClassData();
         this.type = type;
+        this.mContext = context;
+        getOptionData();
+        initAmapLocation();
     }
-
 
 
     @Override
@@ -48,18 +80,21 @@ public class HomeClassSection extends StatelessSection {
 
         ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
 
-
-        switch (type){
+        switch (type) {
             case JOINTED_DATA:
                 final RollCallInfo.ClassInfoBean.JoinedClassDataBean joinedClassDataBean = jointedData.get(position);
                 itemViewHolder.mClassName.setText(joinedClassDataBean.getJoinedClassName());
                 itemViewHolder.mClassDuration.setText(joinedClassDataBean.getJoinedClassTime());
-                if(joinedClassDataBean.isSignable()){
+                if (joinedClassDataBean.isSignable()) {
                     itemViewHolder.mBtn.setText(R.string.not_signed_in);
                     itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
+                    itemViewHolder.mBtn.setOnClickListener(v -> {
 
+                        itemViewHolder.mBtn.setText(R.string.signed_in);
+                        itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
+                    });
 
-                }else{
+                } else {
                     itemViewHolder.mBtn.setText(R.string.signed_in);
                     itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
 
@@ -69,21 +104,37 @@ public class HomeClassSection extends StatelessSection {
                 final RollCallInfo.ClassInfoBean.ManagedClassDataBean managedClassData = createdData.get(position);
                 itemViewHolder.mClassName.setText(managedClassData.getManagedClassName());
                 itemViewHolder.mClassDuration.setText(managedClassData.getManagedClassTime());
-                if(managedClassData.isAbleRollCall()){
+                if (managedClassData.isAbleRollCall()) {
+                    mBtn_status = 0;
                     itemViewHolder.mBtn.setText(R.string.roll_call_on);
-                    itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
-
-
-                }else{
-                    itemViewHolder.mBtn.setText(R.string.roll_call_off);
                     itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
 
+
+                } else {
+                    mBtn_status = 1;
+                    itemViewHolder.mBtn.setText(R.string.roll_call_off);
+                    itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
+
                 }
+
+                itemViewHolder.mBtn.setOnClickListener(v -> {
+
+                    if (mBtn_status == 0) {
+                        initOptionPicker(position,itemViewHolder);
+                    }else{
+                        Intent intent = new Intent(mContext, RollCallResultActivity.class);
+                        intent.putExtra("record_id",mRecordId);
+                        intent.putExtra("class_title",itemViewHolder.mClassName.getText());
+
+                        mContext.startActivity(intent);
+                        itemViewHolder.mBtn.setText(R.string.roll_call_on);
+                        itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
+                    }
+
+                });
                 break;
 
         }
-
-
 
 
     }
@@ -105,8 +156,6 @@ public class HomeClassSection extends StatelessSection {
     }
 
 
-
-
     @Override
     public int getContentItemsTotal() {
         switch (type) {
@@ -120,9 +169,6 @@ public class HomeClassSection extends StatelessSection {
     }
 
 
-
-
-
     static class ItemViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.class_name)
         TextView mClassName;
@@ -130,8 +176,6 @@ public class HomeClassSection extends StatelessSection {
         TextView mClassDuration;
         @BindView(R.id.item_btn_rollcall)
         TextView mBtn;
-
-
 
         ItemViewHolder(View itemView) {
             super(itemView);
@@ -152,5 +196,110 @@ public class HomeClassSection extends StatelessSection {
         }
     }
 
+    private void getOptionData(){
+        for(int i =1;i<=10;i++){
+            minutes.add(i+"");
+        }
+    }
+
+    private void initOptionPicker(int position,ItemViewHolder itemViewHolder){
+        pvOptions = new OptionsPickerBuilder(mContext, (options1, option2, options3, v1) ->{rollCallTime = Integer.valueOf(minutes.get(options1));uploadData(position, itemViewHolder);} )
+                .setTitleText("选择点名时间／分钟")
+                .setSelectOptions(4)//默认选中项
+                .build();
+        pvOptions.setPicker(minutes);
+        pvOptions.show();
+    }
+
+    private RequestBody initRequestbody(int position){
+
+        jsonObject = new JSONObject();
+
+        try {
+            jsonObject .put("classId",createdData.get(position).getManagedClassId());
+            jsonObject .put("timeInterval",rollCallTime);
+            jsonObject .put("longitude",mLocation.getLongitude());
+            jsonObject .put("latitude",mLocation.getLatitude());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"),  jsonObject.toString());
+        return requestBody;
+    }
+
+
+    private void uploadData(int position,ItemViewHolder itemViewHolder){
+        RetrofitHelper.getRollCallAPI()
+                .getStartRollCallById(initRequestbody(position))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+
+                .subscribe(resultBeans -> {
+
+                    if (resultBeans.getCode().equals("0700")) {
+
+                        mRecordId = resultBeans.getRecordId();
+                        itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
+                        itemViewHolder.mBtn.setText(R.string.roll_calling);
+                        RxTimerUtil.timer(rollCallTime, number -> itemViewHolder.mBtn.setText(R.string.roll_call_off));
+                        mBtn_status = 1;
+
+                    } else {
+
+
+                    }
+
+                });
+
+
+    }
+
+    private void initAmapLocation() {
+        //初始化定位
+        mLocationClient = new AMapLocationClient(mContext);
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mAMapLocationListener);
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        // 设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        //设置定位模式为AMapLocationMode.Hight_Accuracy，设备定位模式。
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+        mLocationOption.setInterval(2000);
+        //设置是否返回地址信息（默认返回地址信息）
+        mLocationOption.setNeedAddress(true);
+        //单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
+        mLocationOption.setHttpTimeOut(20000);
+        mLocationOption.setMockEnable(true);
+        if (null != mLocationClient) {
+            mLocationClient.setLocationOption(mLocationOption);
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+        }
+    }
+
+
+    /**
+     * 定位回调每1秒调用一次
+     */
+    public AMapLocationListener mAMapLocationListener = new AMapLocationListener() {
+        @Override
+        public void onLocationChanged(AMapLocation amapLocation) {
+            if (amapLocation != null) {
+                if (amapLocation.getErrorCode() == 0) {
+                    mLocation = amapLocation;
+
+                } else {
+                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                    Log.e("AmapError", "location Error, ErrCode:"
+                            + amapLocation.getErrorCode() + ", errInfo:" + amapLocation.getErrorInfo());
+                }
+            }
+        }
+    };
 
 }

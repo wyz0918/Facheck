@@ -5,45 +5,45 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.fzu.facheck.R;
 import com.fzu.facheck.adapter.section.HomeClassSection;
+import com.fzu.facheck.base.RxLazyFragment;
 import com.fzu.facheck.entity.RollCall.RollCallInfo;
 import com.fzu.facheck.module.common.MainActivity;
-import com.fzu.facheck.R;
-import com.fzu.facheck.base.RxLazyFragment;
 import com.fzu.facheck.network.RetrofitHelper;
-import com.fzu.facheck.utils.SnackbarUtil;
 import com.fzu.facheck.utils.TimeUtil;
 import com.fzu.facheck.widget.CustomEmptyView;
 import com.fzu.facheck.widget.sectioned.SectionedRecyclerViewAdapter;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+/**
+ * @date: 2019/5/3
+ * @author: wyz
+ * @version:
+ * @description: 主页
+ */
 public class HomePageFragment extends RxLazyFragment {
-    private static final String TAG = "HomePage";
 
+
+    private String TAG  = "HomePager";
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-
     @BindView(R.id.toolbar_title)
     TextView mtoolbar_title;
-
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycle)
@@ -53,18 +53,15 @@ public class HomePageFragment extends RxLazyFragment {
 
 
     private String date = getTime();
-
-
     private boolean mIsRefreshing = false;
     private SectionedRecyclerViewAdapter mSectionedAdapter;
     private RollCallInfo results = new RollCallInfo();
 
 
-
     public static HomePageFragment newInstance() {
         return new HomePageFragment();
     }
-    
+
     @Override
     public int getLayoutResId() {
         return R.layout.fragment_home_pager;
@@ -80,7 +77,6 @@ public class HomePageFragment extends RxLazyFragment {
     }
 
 
-
     private void initToolBar() {
         mToolbar.setTitle("");
         mtoolbar_title.setText(date);
@@ -88,12 +84,12 @@ public class HomePageFragment extends RxLazyFragment {
 
     }
 
-    private String getTime(){
+    private String getTime() {
         Date date = new Date();
-        String timePart1  = TimeUtil.parseDate(Calendar.getInstance().getTimeInMillis());
+        String timePart1 = TimeUtil.parseDate(Calendar.getInstance().getTimeInMillis());
         String timePart2 = TimeUtil.getWeek(date);
 
-        return timePart1+"("+timePart2+")";
+        return timePart1 + "(" + timePart2 + ")";
     }
 
 
@@ -127,9 +123,9 @@ public class HomePageFragment extends RxLazyFragment {
     @Override
     protected void loadData() {
 
-        JSONObject userobject=new JSONObject();
+        JSONObject userobject = new JSONObject();
         try {
-            userobject.put("phoneNumber","33333333");
+            userobject.put("phoneNumber", "13215000001");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -137,53 +133,75 @@ public class HomePageFragment extends RxLazyFragment {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), userobject.toString());
 
         RetrofitHelper.getRollCallAPI()
-                .getRollCallInfoById("get_user_class_info",requestBody)
+                .getRollCallInfoById(requestBody)
                 .compose(bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultBeans -> {
 
-                    if(resultBeans.getCode().equals("0900")){
-                        results = resultBeans;
-                        finishTask();
-                    }else{
-                        initEmptyView();
+                    switch (resultBeans.getCode()){
+                        case "0900":
+                        case "0901":
+                        case "0902":
+                            results = resultBeans;
+                            finishTask(resultBeans.getCode());
+                            break;
+                        case "0903":
+                        case "0904":
+                            initEmptyView(resultBeans.getCode());
+                            break;
+
                     }
 
-                }, throwable -> initEmptyView());
+
+
+                }, throwable -> initEmptyView("0904"));
 
 
     }
 
-    @Override
-    protected void finishTask() {
+    protected void finishTask(String code) {
 
-        Log.i(TAG, "finishTask: "+results.getClassInfo().getJoinedClassData().size());
         mSwipeRefreshLayout.setRefreshing(false);
         mIsRefreshing = false;
         hideEmptyView();
-        int size = results.getClassInfo().getJoinedClassData().size();
 
-
-
-            mSectionedAdapter.addSection(new HomeClassSection(results.getClassInfo(),"jointed_data"));
-
-
-            mSectionedAdapter.addSection(new HomeClassSection(results.getClassInfo(),"created_data"));
-
+        switch (code){
+            case "0900":
+                mSectionedAdapter.addSection(new HomeClassSection(results.getClassInfo(), "jointed_data", getActivity()));
+                mSectionedAdapter.addSection(new HomeClassSection(results.getClassInfo(), "created_data", getActivity()));
+                break;
+            case "0901":
+                mSectionedAdapter.addSection(new HomeClassSection(results.getClassInfo(), "jointed_data", getActivity()));
+                break;
+            case "0902":
+                mSectionedAdapter.addSection(new HomeClassSection(results.getClassInfo(), "created_data", getActivity()));
+                break;
+        }
 
         mSectionedAdapter.notifyDataSetChanged();
     }
 
 
-    public void initEmptyView() {
+    public void initEmptyView(String code) {
+
 
         mSwipeRefreshLayout.setRefreshing(false);
         mCustomEmptyView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-        mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error_load);
-        mCustomEmptyView.setEmptyText("加载失败!");
-        SnackbarUtil.showMessage(mRecyclerView, "数据加载失败,请重新加载或者检查网络是否链接");
+
+        switch (code){
+            case "0903":
+                mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error_load);
+                mCustomEmptyView.setEmptyText("目前尚无数据，请到 班级 -> 创建班级／加入班级");
+                break;
+            case "0904":
+                mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error_load);
+                mCustomEmptyView.setEmptyText("加载失败!请重试或检查网络连接");
+                break;
+
+        }
+
     }
 
 
@@ -194,7 +212,7 @@ public class HomePageFragment extends RxLazyFragment {
 
     private void clearData() {
 
-        if(results!=null){
+        if (results != null) {
             results.getClassInfo().getManagedClassData().clear();
             results.getClassInfo().getJoinedClassData().clear();
         }

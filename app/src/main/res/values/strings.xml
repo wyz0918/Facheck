@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Facheck</string>
+
     <string name="title_home">点名</string>
     <string name="title_class">班级</string>
     <string name="title_myinfo">我的</string>
+
     <string name="class_I_jointed">我加入的班级</string>
     <string name="not_signed_in">未签到</string>
     <string name="signed_in">已签到</string>
@@ -10,5 +12,16 @@
     <string name="class_I_created">我创建的班级</string>
     <string name="roll_call_on">开始点名</string>
     <string name="roll_call_off">点名结束</string>
+    <string name="roll_calling">正在点名</string>
+
+    <string name="roll_call_result_footer">点击查看个人详情</string>
+
+
+    <string name="not_signed">未签到</string>
+    <string name="signed">已签到</string>
+    <string name="roll_call_result_pie_chart">班级出勤率</string>
+
+
+
 
 </resources>

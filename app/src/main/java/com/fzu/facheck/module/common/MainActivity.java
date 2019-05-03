@@ -1,5 +1,6 @@
 package com.fzu.facheck.module.common;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,11 +10,16 @@ import android.widget.TextView;
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
 import com.fzu.facheck.module.home.HomePageFragment;
+import com.fzu.facheck.utils.ConstantUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MainActivity extends RxBaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends RxBaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener,EasyPermissions.PermissionCallbacks{
 
 
 
@@ -27,30 +33,20 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
     private long exitTime;
     private HomePageFragment mHomePageFragment;
 
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.LOCATION_HARDWARE,
+            Manifest.permission.CAMERA};
 
 
 
-//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-//
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.navigation_home:
-//                    mTextMessage.setText(R.string.title_home);
-//                    return true;
-//                case R.id.navigation_dashboard:
-//                    mTextMessage.setText(R.string.title_dashboard);
-//                    return true;
-//                case R.id.navigation_notifications:
-//                    mTextMessage.setText(R.string.title_notifications);
-//                    return true;
-//            }
-//            return false;
-//        }
-//
-//
-//    };
+    public void requestPermission(){
+        if(EasyPermissions.hasPermissions(this, permissions)){
+
+        }else{
+            EasyPermissions.requestPermissions(this, "需要申请您手机权限", ConstantUtil.RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION);
+        }
+    }
+
 
 
     @Override
@@ -61,9 +57,12 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
     @Override
     public void initViews(Bundle savedInstanceState) {
 
+
         //初始化Fragment
         initFragments();
         initNavigationView();
+        requestPermission();
+
     }
 
 
@@ -104,5 +103,29 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+
+    @Override public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        new AppSettingsDialog.Builder(this)
+        .setRationale("点名功能需要上述权限，否则无法正常使用，是否打开设置")
+                .setPositiveButton("是")
+                .setNegativeButton("否")
+                .build()
+                .show();
+
+
     }
 }
