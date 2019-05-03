@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fzu.facheck.R;
@@ -37,8 +38,10 @@ import rx.schedulers.Schedulers;
 
 public class GetNewPassActivity extends RxBaseActivity {
 
-    @BindView(R.id.toobar)
-    Toolbar mToolbar;
+    @BindView(R.id.toolbar)
+    Toolbar mtoolbar;
+    @BindView(R.id.toolbar_title)
+    TextView title_text;
     @BindView(R.id.newpass)
     EditText newpassText;
     @BindView(R.id.newpass1)
@@ -113,9 +116,9 @@ public class GetNewPassActivity extends RxBaseActivity {
 
     @Override
     public void initToolBar() {
-        mToolbar.setNavigationIcon(R.drawable.backicon);
-        mToolbar.setTitle("忘记密码");
-        mToolbar.setNavigationOnClickListener(v->finish());
+        mtoolbar.setNavigationIcon(R.drawable.backicon);
+        title_text.setText("忘记密码");
+        mtoolbar.setNavigationOnClickListener(v->finish());
     }
     @OnClick({R.id.ok1,R.id.get_varification})
     void onClick(View view){

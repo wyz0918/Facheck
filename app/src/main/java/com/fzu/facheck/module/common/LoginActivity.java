@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fzu.facheck.module.common.MainActivity;
@@ -38,8 +39,10 @@ import rx.schedulers.Schedulers;
 
 public class LoginActivity extends RxBaseActivity {
 
-    @BindView(R.id.toobar)
-    Toolbar mToolbar;
+    @BindView(R.id.toolbar)
+    Toolbar mtoolbar;
+    @BindView(R.id.toolbar_title)
+    TextView title_text;
     @BindView(R.id.username)
     EditText username;
     @BindView(R.id.password)
@@ -57,9 +60,9 @@ public class LoginActivity extends RxBaseActivity {
 
     @Override
     public void initToolBar() {
-        mToolbar.setNavigationIcon(R.drawable.backicon);
-        mToolbar.setTitle("登录");
-        mToolbar.setNavigationOnClickListener(v->finish());
+        mtoolbar.setNavigationIcon(R.drawable.backicon);
+        title_text.setText("登陆账号");
+        mtoolbar.setNavigationOnClickListener(v->finish());
     }
     @OnClick({R.id.login_button,R.id.forget_pass})
     void onClick(View view){

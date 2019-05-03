@@ -10,6 +10,6 @@ import retrofit2.http.Path;
 import rx.Observable;
 
 public interface LoginServer {
-    @POST("/{cid}")
+    @POST("{cid}")
     Observable<StateInfo> getserver(@Path("cid") String cid, @Body RequestBody requestBody);
 }
