@@ -87,8 +87,6 @@
     <dimen name="roll_call_result_height">45dp</dimen>
 
 
-
-
     <!--bangumi index size-->
     <dimen name="bangumi_index_image_size">120dp</dimen>
 

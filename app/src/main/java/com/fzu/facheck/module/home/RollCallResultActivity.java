@@ -1,11 +1,16 @@
 package com.fzu.facheck.module.home;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,10 +21,13 @@ import com.fzu.facheck.entity.RollCall.RollCallResult;
 import com.fzu.facheck.network.RetrofitHelper;
 import com.fzu.facheck.utils.ConstantUtil;
 import com.fzu.facheck.utils.SnackbarUtil;
+import com.fzu.facheck.widget.CircleProgressView;
 import com.fzu.facheck.widget.CustomEmptyView;
 import com.fzu.facheck.widget.sectioned.SectionedRecyclerViewAdapter;
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -36,9 +44,11 @@ import okhttp3.RequestBody;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class RollCallResultActivity extends RxBaseActivity {
+public class RollCallResultActivity extends RxBaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
-
+    String TAG = "RollCallResult";
+    @BindView(R.id.navigation)
+    BottomNavigationView bottomNavigationView;
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)
@@ -49,6 +59,8 @@ public class RollCallResultActivity extends RxBaseActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.empty_layout)
     CustomEmptyView mCustomEmptyView;
+    @BindView(R.id.circle_progress)
+    CircleProgressView mCircleProgressView;
 
     private String mTitle;
     private SectionedRecyclerViewAdapter mSectionedAdapter;
@@ -70,11 +82,8 @@ public class RollCallResultActivity extends RxBaseActivity {
             mTitle = intent.getStringExtra(ConstantUtil.EXTRA_CLASS_TITLE);
             mRecordId = intent.getStringExtra(ConstantUtil.EXTRA_RECORD_ID);
         }
-        initToolBar();
-        initPieChart();
         initRecyclerView();
         loadData();
-        finishTask();
 
     }
 
@@ -91,6 +100,12 @@ public class RollCallResultActivity extends RxBaseActivity {
     }
 
     @Override
+    public void initNavigationView() {
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
     public void loadData() {
         JSONObject userobject = new JSONObject();
         try {
@@ -99,44 +114,53 @@ public class RollCallResultActivity extends RxBaseActivity {
             e.printStackTrace();
         }
 
+
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json;charset=utf-8"), userobject.toString());
 
         RetrofitHelper.getRollCallAPI()
                 .getRollCallResultById(requestBody)
                 .compose(bindToLifecycle())
+                .doOnSubscribe(this::showProgressBar)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(resultBeans -> {
 
-                    if (resultBeans.getCode().equals("0900")) {
+
+                    if (resultBeans.getCode().equals("1000")) {
+
                         mRollCallResult = resultBeans;
                         finishTask();
                     } else {
+
                         initEmptyView();
                     }
 
-                }, throwable -> initEmptyView());
+                }, throwable -> {
+                    hideProgressBar();
+                    initEmptyView();
 
+                });
+
+    }
+
+    @Override
+    public void showProgressBar() {
+        mCircleProgressView.setVisibility(View.VISIBLE);
+        mCircleProgressView.spin();
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mCircleProgressView.setVisibility(View.GONE);
+        mCircleProgressView.stopSpinning();
     }
 
     @Override
     public void initRecyclerView() {
 
         mSectionedAdapter = new SectionedRecyclerViewAdapter();
-        GridLayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                switch (mSectionedAdapter.getSectionItemViewType(position)) {
-                    case SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER:
-                        return 2;
-                    case SectionedRecyclerViewAdapter.VIEW_TYPE_FOOTER:
-                        return 2;
-                    default:
-                        return 1;
-                }
-            }
-        });
+        GridLayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mSectionedAdapter);
 
@@ -145,7 +169,9 @@ public class RollCallResultActivity extends RxBaseActivity {
     @Override
     public void finishTask() {
 
+        hideProgressBar();
         hideEmptyView();
+        initPieChart();
         mSectionedAdapter.addSection(new RollCallResultSection(mRollCallResult, "not_signed", this));
         mSectionedAdapter.addSection(new RollCallResultSection(mRollCallResult, "signed", this));
         mSectionedAdapter.notifyDataSetChanged();
@@ -156,17 +182,26 @@ public class RollCallResultActivity extends RxBaseActivity {
     public void initPieChart() {
 
         mPieChart.setUsePercentValues(true);
-        mPieChart.setExtraOffsets(5, 10, 5, 5);
         mPieChart.setDrawHoleEnabled(true);
-        mPieChart.setDragDecelerationFrictionCoef(0.95f);
         mPieChart.setCenterText("班级出勤率");
+        mPieChart.setCenterTextColor(R.color.font_gray);
+        mPieChart.setHoleRadius(45f);
+
+
         Description description = new Description();
         description.setText("");
         mPieChart.setDescription(description);
+        mPieChart.setHighlightPerTapEnabled(true);
+        mPieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+
+
+        mPieChart.setExtraOffsets(0f,10f,0f,0f);
 
         List<PieEntry> strings = new ArrayList<>();
-        strings.add(new PieEntry(Float.parseFloat(mRollCallResult.getRecordInfo().getAttendanceRate()), R.string.signed));
-        strings.add(new PieEntry(1-Float.parseFloat(mRollCallResult.getRecordInfo().getAttendanceRate()), R.string.not_signed));
+        strings.add(new PieEntry(Float.parseFloat(mRollCallResult.getRecordInfo().getAttendanceRate()), "已签到"));
+        strings.add(new PieEntry(1-Float.parseFloat(mRollCallResult.getRecordInfo().getAttendanceRate()), "未签到"));
+
+
 
         PieDataSet dataSet = new PieDataSet(strings, "");
 
@@ -174,9 +209,20 @@ public class RollCallResultActivity extends RxBaseActivity {
         colors.add(getResources().getColor(R.color.colorPrimary));
         colors.add(getResources().getColor(R.color.gray));
         dataSet.setColors(colors);
+        dataSet.setValueLinePart1OffsetPercentage(70f);
+        dataSet.setValueLineColor(R.color.font_gray);
+        dataSet.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataSet.setSliceSpace(1f);
+        dataSet.setHighlightEnabled(true);
+
+        Legend legend = mPieChart.getLegend();
+        legend.setEnabled(false);
+
 
         PieData pieData = new PieData(dataSet);
         pieData.setDrawValues(true);
+        pieData.setValueTextSize(10f);
+        pieData.setValueTextColor(R.color.font_gray);
 
         mPieChart.setData(pieData);
         mPieChart.invalidate();
@@ -188,6 +234,17 @@ public class RollCallResultActivity extends RxBaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -206,4 +263,8 @@ public class RollCallResultActivity extends RxBaseActivity {
     }
 
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
 }

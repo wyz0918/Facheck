@@ -22,8 +22,8 @@
         android:layout_alignParentBottom="true"
         android:background="@color/navigation_background_light"
         app:menu="@menu/navigation"
-        app:itemTextAppearanceActive="@color/colorPrimary"
-        app:itemTextAppearanceInactive="@color/font_normal"
+        app:itemTextColor="@drawable/selector_navigation"
+
         />
 
 

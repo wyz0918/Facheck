@@ -20,6 +20,10 @@ public class RollCallResultSection extends StatelessSection {
     private List<RollCallResult.RecordInfoBean.AlreadySignedInBean> signedBeans;
     private List<RollCallResult.RecordInfoBean.NotYetSignedInBean> notSignedBeans;
     private String type;
+    private String mSigned_num;
+    private String mNot_Signed_num;
+
+
     private Context mContext;
 
 
@@ -28,6 +32,10 @@ public class RollCallResultSection extends StatelessSection {
         super(R.layout.layout_roll_call_result_header, R.layout.layout_roll_call_result_body);
         this.signedBeans = rollCallResult.getRecordInfo().getAlreadySignedIn();
         this.notSignedBeans = rollCallResult.getRecordInfo().getNotYetSignedIn();
+        this.mSigned_num = String.valueOf(rollCallResult.getRecordInfo().getAlreadyNumber())+"/"+
+                String.valueOf(rollCallResult.getRecordInfo().getTotalNumber());
+        this.mNot_Signed_num = String.valueOf(rollCallResult.getRecordInfo().getNotYetNumber())+"/"+
+                String.valueOf(rollCallResult.getRecordInfo().getTotalNumber());
         this.type = type;
         this.mContext = context;
 
@@ -79,9 +87,13 @@ public class RollCallResultSection extends StatelessSection {
         switch (type) {
             case NOT_SIGNRE:
                 headerViewHolder.mTitle_signed.setText(R.string.not_signed);
+                headerViewHolder.mTitle_num.setText(mNot_Signed_num);
+
                 break;
             case SIGNED:
                 headerViewHolder.mTitle_signed.setText(R.string.signed);
+                headerViewHolder.mTitle_num.setText(mSigned_num);
+
                 break;
 
         }
@@ -106,8 +118,7 @@ public class RollCallResultSection extends StatelessSection {
         TextView mStudentID;
         @BindView(R.id.student_name)
         TextView mStudentName;
-        @BindView(R.id.roll_call_result_body)
-        TextView mBody;
+
 
 
         ItemViewHolder(View itemView) {
@@ -120,6 +131,8 @@ public class RollCallResultSection extends StatelessSection {
     static class HeaderViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.title_signed)
         TextView mTitle_signed;
+        @BindView(R.id.title_signed_num)
+        TextView mTitle_num;
 
 
         HeaderViewHolder(View itemView) {

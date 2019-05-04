@@ -20,8 +20,9 @@
     <string name="not_signed">未签到</string>
     <string name="signed">已签到</string>
     <string name="roll_call_result_pie_chart">班级出勤率</string>
-
-
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 
 
 </resources>

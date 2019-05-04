@@ -50,6 +50,11 @@ public abstract class RxBaseActivity extends RxAppCompatActivity{
     public abstract void initToolBar();
 
     /**
+     * 初始化Bottombar
+     */
+    public abstract void initNavigationView();
+
+    /**
      * 加载数据
      */
     public void loadData() {

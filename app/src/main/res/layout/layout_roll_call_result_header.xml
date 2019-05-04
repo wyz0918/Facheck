@@ -15,4 +15,13 @@
         android:textColor="@color/font_normal"
         android:textSize="@dimen/default_small_text_size" />
 
+    <TextView
+        android:id="@+id/title_signed_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_small_padding"
+        android:gravity="center"
+        android:textColor="@color/font_normal"
+        android:textSize="@dimen/default_small_text_size" />
+
 </LinearLayout>

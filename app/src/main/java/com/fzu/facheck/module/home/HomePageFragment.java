@@ -1,5 +1,6 @@
 package com.fzu.facheck.module.home;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,7 +36,7 @@ import rx.schedulers.Schedulers;
  * @version:
  * @description: 主页
  */
-public class HomePageFragment extends RxLazyFragment {
+public class HomePageFragment extends RxLazyFragment  {
 
 
     private String TAG  = "HomePager";
@@ -56,6 +57,10 @@ public class HomePageFragment extends RxLazyFragment {
     private boolean mIsRefreshing = false;
     private SectionedRecyclerViewAdapter mSectionedAdapter;
     private RollCallInfo results = new RollCallInfo();
+
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA};
 
 
     public static HomePageFragment newInstance() {
@@ -192,11 +197,11 @@ public class HomePageFragment extends RxLazyFragment {
 
         switch (code){
             case "0903":
-                mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error_load);
+                mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error);
                 mCustomEmptyView.setEmptyText("目前尚无数据，请到 班级 -> 创建班级／加入班级");
                 break;
             case "0904":
-                mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error_load);
+                mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error);
                 mCustomEmptyView.setEmptyText("加载失败!请重试或检查网络连接");
                 break;
 

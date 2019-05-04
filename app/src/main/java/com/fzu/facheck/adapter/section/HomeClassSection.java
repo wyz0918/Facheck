@@ -2,6 +2,7 @@ package com.fzu.facheck.adapter.section;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -51,6 +52,8 @@ public class HomeClassSection extends StatelessSection {
     private AMapLocationClientOption mLocationOption;
 
     private String mRecordId;
+
+    String TAG = "Home";
 
 
 
@@ -123,8 +126,13 @@ public class HomeClassSection extends StatelessSection {
                         initOptionPicker(position,itemViewHolder);
                     }else{
                         Intent intent = new Intent(mContext, RollCallResultActivity.class);
-                        intent.putExtra("record_id",mRecordId);
-                        intent.putExtra("class_title",itemViewHolder.mClassName.getText());
+
+                        Log.i(TAG, "onBindItemViewHolder: "+mRecordId);
+//                        intent.putExtra("record_id",mRecordId);
+//                        intent.putExtra("class_title",itemViewHolder.mClassName.getText());
+
+                        intent.putExtra("record_id","00000001");
+                        intent.putExtra("class_title","高等数学");
 
                         mContext.startActivity(intent);
                         itemViewHolder.mBtn.setText(R.string.roll_call_on);
@@ -216,10 +224,18 @@ public class HomeClassSection extends StatelessSection {
         jsonObject = new JSONObject();
 
         try {
+            if(mLocation!=null){
+
+                jsonObject .put("longitude",mLocation.getLongitude());
+                jsonObject .put("latitude",mLocation.getLatitude());
+            }else{
+                //当前网络状况不好 无法定位 请移到网络状况良好的地区
+                jsonObject .put("longitude",119.30);
+                jsonObject .put("latitude",26.08);
+            }
             jsonObject .put("classId",createdData.get(position).getManagedClassId());
             jsonObject .put("timeInterval",rollCallTime);
-            jsonObject .put("longitude",mLocation.getLongitude());
-            jsonObject .put("latitude",mLocation.getLatitude());
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -256,6 +272,36 @@ public class HomeClassSection extends StatelessSection {
 
     }
 
+//    private void initAmapLocation() {
+//        // 定位引擎接口
+//        ILocationManager mLocationManager;
+//        // 配置信息
+//        Configuration mConfiguration;
+//
+//        mLocationManager = OnlineLocator.getInstance();
+//        mConfiguration = createConfigBuilder(mContext).build();
+//
+//        mLocationManager.init("", mConfiguration, mSDKInitHandler);
+//    }
+//
+//    /**
+//     * 创建室内定位需要的配置信息
+//     * @param context 主context
+//     * @return 配置信息的builder
+//     */
+//    public static Configuration.Builder createConfigBuilder(Context context){
+//        Configuration.Builder mConfigBuilder= new Configuration.Builder(context);
+//        // 指定是使用wifi定位还是蓝牙定位
+//        //mConfigBuilder.setLocationProvider(Configuration.LocationProvider.BLE);
+//        mConfigBuilder.setLocationProvider(Configuration.LocationProvider.BLE);
+//
+//        // ***指定自己在高德网站申请的key***
+//        mConfigBuilder.setLBSParam("a0a773675f4bd808453f0c6451eddb6b");
+//        return mConfigBuilder;
+//    }
+
+
+
     private void initAmapLocation() {
         //初始化定位
         mLocationClient = new AMapLocationClient(mContext);
@@ -264,7 +310,7 @@ public class HomeClassSection extends StatelessSection {
         //初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
         // 设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）
-        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.SignIn);
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport);
         //设置定位模式为AMapLocationMode.Hight_Accuracy，设备定位模式。
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
@@ -272,7 +318,7 @@ public class HomeClassSection extends StatelessSection {
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
-        mLocationOption.setHttpTimeOut(20000);
+        mLocationOption.setHttpTimeOut(50000);
         mLocationOption.setMockEnable(true);
         if (null != mLocationClient) {
             mLocationClient.setLocationOption(mLocationOption);

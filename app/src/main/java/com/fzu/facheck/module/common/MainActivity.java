@@ -28,13 +28,10 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
 
     private TextView mTextMessage;
 
-    private int currentTabIndex;
-    private int index;
-    private long exitTime;
     private HomePageFragment mHomePageFragment;
 
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.LOCATION_HARDWARE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.CAMERA};
 
 
@@ -43,7 +40,7 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
         if(EasyPermissions.hasPermissions(this, permissions)){
 
         }else{
-            EasyPermissions.requestPermissions(this, "需要申请您手机权限", ConstantUtil.RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION);
+            EasyPermissions.requestPermissions(this, "需要申请您手机权限", ConstantUtil.RC_CAMERA__CALENDAR_STORAGE_PHONE_LOCATION,permissions);
         }
     }
 
@@ -57,22 +54,19 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
     @Override
     public void initViews(Bundle savedInstanceState) {
 
-
+        requestPermission();
         //初始化Fragment
         initFragments();
         initNavigationView();
-        requestPermission();
+
 
     }
 
 
-    /**
-     * 初始化navigation
-     */
-    private void initNavigationView() {
+    @Override
+    public void initNavigationView() {
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-
 
     }
 
