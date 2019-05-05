@@ -39,9 +39,12 @@ import android.widget.TextView;
 
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
+import com.fzu.facheck.utils.PhotoUtil;
 import com.fzu.facheck.utils.ToastUtil;
 import com.fzu.facheck.widget.sectioned.AutoFitTextureView;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,7 +79,6 @@ public class CameraActivity extends RxBaseActivity {
     private boolean mFlashSupported;
 
     private byte[] bytes;
-    private CameraManager mcameraManager;
 
     @BindView(R.id.cancel_s)
     ImageView image_cancel;
@@ -88,6 +90,7 @@ public class CameraActivity extends RxBaseActivity {
     ImageView image_commit;
     @BindView(R.id.preview)
     AutoFitTextureView mTextureView;
+    private CameraManager manager;
     //textureview监听
     private final TextureView.SurfaceTextureListener mSurfaceTextureListener
             = new TextureView.SurfaceTextureListener() {
@@ -225,7 +228,7 @@ public class CameraActivity extends RxBaseActivity {
         }
     }
     private void setUpCameraOutputs(int width, int height) {
-        CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
+        manager = (CameraManager)getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
         try {
             int cameridnum=manager.getCameraIdList().length;
             if(cameridnum==0){
@@ -312,7 +315,6 @@ public class CameraActivity extends RxBaseActivity {
 
     @Override
     public void onResume() {
-        Log.d(TAG,"start");
         super.onResume();
         startBackgroundThread();
         if (mTextureView.isAvailable()) {
@@ -323,7 +325,6 @@ public class CameraActivity extends RxBaseActivity {
     }
     @Override
     public void onPause() {
-        Log.d(TAG,"stop");
         closeCamera();
         stopBackgroundThread();
         super.onPause();
@@ -349,12 +350,44 @@ public class CameraActivity extends RxBaseActivity {
                 finish();
                 break;
             case R.id.commit_p:
-                Intent intent=new Intent();
-                intent.putExtra("photo",bytes);
-                setResult(RESULT_OK,intent);
-                finish();
+//                Intent intent=new Intent();
+//                intent.putExtra("photo",bytes);
+//                setResult(RESULT_OK,intent);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FileOutputStream outputStream=null;
+                        try {
+                            outputStream=new FileOutputStream(PhotoUtil.getPath());
+                            outputStream.write(bytes);
+                            bytes=null;
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }finally {
+                            if(outputStream!=null) {
+                                try {
+                                    outputStream.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        send();
+                    }
+                }).start();
                 break;
         }
+    }
+    private void send(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent=new Intent();
+                intent.putExtra("photo",PhotoUtil.getPath());
+                setResult(RESULT_OK,intent);
+                finish();
+            }
+        });
     }
     @Override
     public int getLayoutId() {
@@ -388,12 +421,13 @@ public class CameraActivity extends RxBaseActivity {
         }
         setUpCameraOutputs(width, height);
         configureTransform(width, height);
-        mcameraManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
+        //mcameraManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
+//        CameraManager mcameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try {
             if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
             }
-            mcameraManager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
+            manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -430,8 +464,8 @@ public class CameraActivity extends RxBaseActivity {
                 mImageReader.close();
                 mImageReader = null;
             }
-            if(null != mcameraManager){
-                mcameraManager=null;
+            if(null!=manager){
+                manager=null;
             }
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera closing.", e);
@@ -530,7 +564,6 @@ public class CameraActivity extends RxBaseActivity {
                     CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, getOrientation(rotation));
-
             CameraCaptureSession.CaptureCallback CaptureCallback
                     = new CameraCaptureSession.CaptureCallback() {
                 @Override

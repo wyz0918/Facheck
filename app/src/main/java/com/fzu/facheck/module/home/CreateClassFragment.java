@@ -19,6 +19,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxLazyFragment;
 import com.fzu.facheck.entity.RollCall.ClassInfo;
+import com.fzu.facheck.entity.RollCall.CreateClassInfo;
 import com.fzu.facheck.network.RetrofitHelper;
 import com.fzu.facheck.utils.TimeUtil;
 import com.fzu.facheck.utils.ToastUtil;
@@ -149,13 +150,13 @@ public class CreateClassFragment extends RxLazyFragment {
                     .compose(bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<ClassInfo>() {
+                    .subscribe(new Subscriber<CreateClassInfo>() {
                         @Override
                         public void onCompleted() { }
                         @Override
                         public void onError(Throwable e) { ToastUtil.showShort(getActivity(),"请求失败");}
                         @Override
-                        public void onNext(ClassInfo classInfo) {
+                        public void onNext(CreateClassInfo classInfo) {
                             if(classInfo.code.equals("0500")){
                                 wordData.clear();
                                 ToastUtil.showShort(getActivity(),"创建成功 "+classInfo.getClassID());

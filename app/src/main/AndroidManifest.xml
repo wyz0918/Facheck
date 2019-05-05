@@ -31,18 +31,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity android:name=".module.common.StartActivity">-->
+        <activity android:name=".module.common.StartActivity">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
 
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
-        <!--</activity>-->
-        <!--<activity android:name=".module.common.LoginActivity" />-->
-        <!--<activity android:name=".module.common.RegisterActivity" />-->
-        <!--<activity android:name=".module.common.CameraActivity"/>-->
-        <!--<activity android:name=".module.common.CommonActivity"/>-->
-        <!--<activity android:name=".module.common.GetNewPassActivity"></activity>-->
+        </activity>
+        <activity android:name=".module.common.LoginActivity" />
+        <activity android:name=".module.common.RegisterActivity" />
+        <activity android:name=".module.common.CameraActivity"/>
+        <activity android:name=".module.common.CommonActivity"/>
+        <activity android:name=".module.common.GetNewPassActivity"></activity>
     </application>
 
 </manifest>
