@@ -82,6 +82,12 @@
     <dimen name="home_class_btn_width">85dp</dimen>
     <dimen name="home_class_btn_height">35dp</dimen>
 
+
+    <!--submit button size-->
+
+    <dimen name="submit_btn_width">70dp</dimen>
+    <dimen name="submit_btn_height">30dp</dimen>
+
     <!--roll call result  size-->
 
     <dimen name="roll_call_result_height">45dp</dimen>

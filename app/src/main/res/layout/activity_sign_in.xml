@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.fzu.facheck.widget.CircleProgressView
+        android:id="@+id/circle_progress"
+        android:layout_width="@dimen/circle_progress_view_default_size"
+        android:layout_height="@dimen/circle_progress_view_default_size"
+        android:layout_centerInParent="true"
+        app:matProg_barColor="?attr/colorPrimary"
+        app:matProg_barWidth="@dimen/circle_progress_view_default_border_width">
+
+    </com.fzu.facheck.widget.CircleProgressView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <include layout="@layout/layout_toolbar_button" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/activity_horizontal_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:id="@+id/title_class"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_small_padding"
+                android:gravity="center"
+                android:text="@string/upload_photo"
+                android:textColor="@color/font_normal"
+                android:textSize="@dimen/default_small_text_size" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:layout_marginBottom="@dimen/default_grow_margin"
+                android:background="@drawable/bg_border"
+                android:elevation="@dimen/card_elevation"
+                android:paddingBottom="@dimen/activity_horizontal_margin">
+
+                <RelativeLayout
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="@dimen/default_general_margin">
+
+                    <ImageView
+                        android:id="@+id/selfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/backgroud_center"
+                        android:backgroundTint="@color/gray_light_30" />
+
+                    <Button
+                        android:id="@+id/bt_del"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/delete" />
+
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/default_grow_margin"
+                android:background="@drawable/reminder_shape"
+                android:orientation="vertical"
+                android:padding="@dimen/default_grow_margin">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/default_tiny_padding">
+
+                    <ImageView
+                        android:id="@+id/tips_icon"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/tips"
+                        android:tint="@color/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/upload_photo_tips" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:lineSpacingExtra="@dimen/default_small_padding"
+                    android:text="@string/upload_photo_tips_details"
+
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

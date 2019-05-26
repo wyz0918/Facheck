@@ -44,7 +44,7 @@ import okhttp3.RequestBody;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class RollCallResultActivity extends RxBaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+public class RollCallResultActivity extends RxBaseActivity {
 
     String TAG = "RollCallResult";
     @BindView(R.id.navigation)
@@ -101,7 +101,6 @@ public class RollCallResultActivity extends RxBaseActivity implements BottomNavi
 
     @Override
     public void initNavigationView() {
-        bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
     }
 
@@ -263,8 +262,4 @@ public class RollCallResultActivity extends RxBaseActivity implements BottomNavi
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        return false;
-    }
 }

@@ -12,11 +12,15 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.autonavi.indoor.constant.Configuration;
+import com.autonavi.indoor.location.ILocationManager;
+import com.autonavi.indoor.onlinelocation.OnlineLocator;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.fzu.facheck.R;
 import com.fzu.facheck.entity.RollCall.RollCallInfo;
 import com.fzu.facheck.module.home.RollCallResultActivity;
+import com.fzu.facheck.module.home.SignInActivity;
 import com.fzu.facheck.network.RetrofitHelper;
 import com.fzu.facheck.utils.RxTimerUtil;
 import com.fzu.facheck.widget.sectioned.StatelessSection;
@@ -47,7 +51,9 @@ public class HomeClassSection extends StatelessSection {
     private int mBtn_status = 0;
     private JSONObject jsonObject;
 
-    private AMapLocation mLocation; //当前点的位置
+
+
+    private static AMapLocation mLocation; //当前点的位置
     private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
 
@@ -91,10 +97,18 @@ public class HomeClassSection extends StatelessSection {
                 if (joinedClassDataBean.isSignable()) {
                     itemViewHolder.mBtn.setText(R.string.not_signed_in);
                     itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
+
                     itemViewHolder.mBtn.setOnClickListener(v -> {
 
-                        itemViewHolder.mBtn.setText(R.string.signed_in);
-                        itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
+                        Intent intent = new Intent(mContext, SignInActivity.class);
+
+
+                        intent.putExtra("record_id","00000001");
+                        intent.putExtra("class_title","高等数学");
+
+                        mContext.startActivity(intent);
+
+
                     });
 
                 } else {
@@ -245,6 +259,9 @@ public class HomeClassSection extends StatelessSection {
         return requestBody;
     }
 
+    public static AMapLocation getmLocation() {
+        return mLocation;
+    }
 
     private void uploadData(int position,ItemViewHolder itemViewHolder){
         RetrofitHelper.getRollCallAPI()
@@ -257,7 +274,7 @@ public class HomeClassSection extends StatelessSection {
                     if (resultBeans.getCode().equals("0700")) {
 
                         mRecordId = resultBeans.getRecordId();
-                        itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
+                        itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_blue);
                         itemViewHolder.mBtn.setText(R.string.roll_calling);
                         RxTimerUtil.timer(rollCallTime, number -> itemViewHolder.mBtn.setText(R.string.roll_call_off));
                         mBtn_status = 1;
@@ -271,36 +288,6 @@ public class HomeClassSection extends StatelessSection {
 
 
     }
-
-//    private void initAmapLocation() {
-//        // 定位引擎接口
-//        ILocationManager mLocationManager;
-//        // 配置信息
-//        Configuration mConfiguration;
-//
-//        mLocationManager = OnlineLocator.getInstance();
-//        mConfiguration = createConfigBuilder(mContext).build();
-//
-//        mLocationManager.init("", mConfiguration, mSDKInitHandler);
-//    }
-//
-//    /**
-//     * 创建室内定位需要的配置信息
-//     * @param context 主context
-//     * @return 配置信息的builder
-//     */
-//    public static Configuration.Builder createConfigBuilder(Context context){
-//        Configuration.Builder mConfigBuilder= new Configuration.Builder(context);
-//        // 指定是使用wifi定位还是蓝牙定位
-//        //mConfigBuilder.setLocationProvider(Configuration.LocationProvider.BLE);
-//        mConfigBuilder.setLocationProvider(Configuration.LocationProvider.BLE);
-//
-//        // ***指定自己在高德网站申请的key***
-//        mConfigBuilder.setLBSParam("a0a773675f4bd808453f0c6451eddb6b");
-//        return mConfigBuilder;
-//    }
-
-
 
     private void initAmapLocation() {
         //初始化定位

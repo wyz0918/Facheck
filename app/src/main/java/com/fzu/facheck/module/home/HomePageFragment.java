@@ -130,7 +130,7 @@ public class HomePageFragment extends RxLazyFragment  {
 
         JSONObject userobject = new JSONObject();
         try {
-            userobject.put("phoneNumber", "13215000001");
+            userobject.put("phoneNumber", "13215000002");
         } catch (JSONException e) {
             e.printStackTrace();
         }

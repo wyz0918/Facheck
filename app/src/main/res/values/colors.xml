@@ -23,6 +23,9 @@
     <color name="card_view_background">@color/white</color>
     <color name="window_background">#eaeaea</color>
     <color name="toolbar">#62adc2</color>
+    <color name="reminder">#ffe69b</color>
+    <color name="reminder_backgroud">#c6f0ea</color>
+
     <drawable name="transparent">#00000000</drawable>
 
 

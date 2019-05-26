@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Facheck</string>
+    <string name="submit">提交</string>
+    <string name="cancel">取消</string>
+
+
 
     <string name="title_home">点名</string>
     <string name="title_class">班级</string>
@@ -20,9 +24,12 @@
     <string name="not_signed">未签到</string>
     <string name="signed">已签到</string>
     <string name="roll_call_result_pie_chart">班级出勤率</string>
-    <string name="title_activity_main2">Main2Activity</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+
+    <string name="upload_photo">请上传自拍照进行签到：</string>
+    <string name="upload_photo_tips">拍照提示：</string>
+    <string name="upload_photo_tips_details">1、请将摄像头对准脸部。\n2、不要遮挡脸部。\n3、请在光线充足的条件下拍照。</string>
+
+
 
 
 </resources>

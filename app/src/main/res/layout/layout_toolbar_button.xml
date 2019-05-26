@@ -25,7 +25,18 @@
             android:textColor="@color/white"
             android:textSize="@dimen/app_bar_default_text_size"></TextView>
 
+        <Button
+            android:id="@+id/commit_selfile"
+            android:layout_width="@dimen/submit_btn_width"
+            android:layout_height="@dimen/submit_btn_height"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/default_general_margin"
+            android:background="@drawable/btn_rollcall_green"
+            android:text="@string/submit"
+            android:textColor="@color/white"
+            android:textSize="@dimen/default_medium_text_size"
 
+            />
 
     </android.support.v7.widget.Toolbar>
 

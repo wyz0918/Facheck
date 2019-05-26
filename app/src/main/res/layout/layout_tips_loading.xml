@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:minHeight="100dp"
+    android:minWidth="280dp"
+    android:gravity="center"
+    android:padding="10dp"
+    android:background="@drawable/popupwindowstyle">
+
+    <com.fzu.facheck.widget.CircleProgressView
+        android:id="@+id/circle_progress"
+        android:layout_width="@dimen/circle_progress_view_default_size"
+        android:layout_height="@dimen/circle_progress_view_default_size"
+        android:layout_gravity="center"
+        app:matProg_barColor="?attr/colorPrimary"
+        app:matProg_barWidth="@dimen/circle_progress_view_default_border_width"/>
+    <TextView
+        android:id="@+id/tipTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="数据加载中...."
+        />
+</LinearLayout>
+
+
+
+

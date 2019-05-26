@@ -4,6 +4,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.fzu.facheck.FacheckAPP;
 import com.fzu.facheck.network.api.LoginServer;
 import com.fzu.facheck.network.api.RollCallService;
+import com.fzu.facheck.network.api.SignInService;
 import com.fzu.facheck.network.auxiliary.ApiConstants;
 import com.fzu.facheck.utils.CommonUtil;
 
@@ -36,42 +37,16 @@ public class RetrofitHelper {
     }
 
     public static RollCallService getRollCallAPI() {
-        return createApi(RollCallService.class, ApiConstants.ROLLCALL_URL);
+        return createApi(RollCallService.class, ApiConstants.BASE_URL);
+    }
+
+    public static SignInService postSignInAPI() {
+        return createApi(SignInService.class, ApiConstants.BASE_URL);
     }
 
 
-//
-//    public static BiliGoService getBiliGoAPI() {
-//        return createApi(BiliGoService.class, ApiConstants.BILI_GO_BASE_URL);
-//    }
-//
-//    public static RankService getRankAPI() {
-//        return createApi(RankService.class, ApiConstants.RANK_BASE_URL);
-//    }
-//
-//    public static UserService getUserAPI() {
-//        return createApi(UserService.class, ApiConstants.USER_BASE_URL);
-//    }
-//
-//    public static VipService getVipAPI() {
-//        return createApi(VipService.class, ApiConstants.VIP_BASE_URL);
-//    }
-//
-//    public static BangumiService getBangumiAPI() {
-//        return createApi(BangumiService.class, ApiConstants.BANGUMI_BASE_URL);
-//    }
-//
-//    public static SearchService getSearchAPI() {
-//        return createApi(SearchService.class, ApiConstants.SEARCH_BASE_URL);
-//    }
-//
-//    public static AccountService getAccountAPI() {
-//        return createApi(AccountService.class, ApiConstants.ACCOUNT_BASE_URL);
-//    }
-//
-//    public static Im9Service getIm9API() {
-//        return createApi(Im9Service.class, ApiConstants.IM9_BASE_URL);
-//    }
+
+
     //注册、登入、忘记密码服务
     public static LoginServer getLoAPI(){
         return createApi(LoginServer.class,"http://172.26.93.218:5000");
