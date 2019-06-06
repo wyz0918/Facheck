@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appNs="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/creat_class"
+        android:orderInCategory="80"
+        android:title="创建班级"
+        appNs:showAsAction="never"/>
+    <item
+        android:id="@+id/add_class"
+        android:orderInCategory="80"
+        android:title="加入班级"
+        appNs:showAsAction="never"/>
+</menu>

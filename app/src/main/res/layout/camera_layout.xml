@@ -15,22 +15,22 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
     </RelativeLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textColor="@color/white"
-        android:text="请您将正脸对准摄像头"
-        android:gravity="center"
-        android:background="@color/colorPrimary"
-        android:layout_weight="0.5"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:textColor="@color/white"
-        android:text="保证完整的脸部处于可视区域"
-        android:gravity="center"
-        android:background="@color/colorPrimary"
-        android:layout_weight="0.5"/>
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="请您将正脸对准摄像头"-->
+        <!--android:gravity="center"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:layout_weight="0.5"/>-->
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="保证完整的脸部处于可视区域"-->
+        <!--android:gravity="center"-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:layout_weight="0.5"/>-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

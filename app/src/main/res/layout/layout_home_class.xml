@@ -11,7 +11,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/home_class_layout_height"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/home_class_layout_height"
         android:layout_marginTop="@dimen/default_tiny_padding"
         android:paddingStart="@dimen/default_grow_margin"
         android:paddingEnd="@dimen/default_general_margin"
@@ -34,6 +35,8 @@
             android:id="@+id/class_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_below="@id/class_name"
             android:layout_alignParentBottom="true"
             android:textColor="@color/media_controller_bg"
             android:textSize="@dimen/default_medium_text_size" />

@@ -93,7 +93,7 @@ public class HomeClassSection extends StatelessSection {
             case JOINTED_DATA:
                 final RollCallInfo.ClassInfoBean.JoinedClassDataBean joinedClassDataBean = jointedData.get(position);
                 itemViewHolder.mClassName.setText(joinedClassDataBean.getJoinedClassName());
-                itemViewHolder.mClassDuration.setText(joinedClassDataBean.getJoinedClassTime());
+                itemViewHolder.mClassDuration.setText(getDtime(joinedClassDataBean.getJoinedClassTime()));
                 if (joinedClassDataBean.isSignable()) {
                     itemViewHolder.mBtn.setText(R.string.not_signed_in);
                     itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
@@ -120,7 +120,7 @@ public class HomeClassSection extends StatelessSection {
             case CREATE_DATA:
                 final RollCallInfo.ClassInfoBean.ManagedClassDataBean managedClassData = createdData.get(position);
                 itemViewHolder.mClassName.setText(managedClassData.getManagedClassName());
-                itemViewHolder.mClassDuration.setText(managedClassData.getManagedClassTime());
+                itemViewHolder.mClassDuration.setText(getDtime(managedClassData.getManagedClassTime()));
                 if (managedClassData.isAbleRollCall()) {
                     mBtn_status = 0;
                     itemViewHolder.mBtn.setText(R.string.roll_call_on);
@@ -334,5 +334,12 @@ public class HomeClassSection extends StatelessSection {
             }
         }
     };
-
+    private String getDtime(String s){
+        String[] all=s.split(";");
+        String s1=all[0];
+        for(int i=1;i<all.length;i++){
+            s1=s1+"\n"+all[i];
+        }
+        return s1;
+    }
 }

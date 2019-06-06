@@ -10,12 +10,12 @@ buildscript {
 
 
 apply plugin: 'com.android.application'
-//apply plugin: 'com.mob.sdk'
-//MobSDK{
-//    appKey "2ad6399bb9865"
-//    appSecret "55335739821de02f5fcfd8819903afea"
-//    SMSSDK{}
-//}
+apply plugin: 'com.mob.sdk'
+MobSDK{
+    appKey "2ad6399bb9865"
+    appSecret "55335739821de02f5fcfd8819903afea"
+    SMSSDK{}
+}
 //引入外部文件维护version
 Properties props = new Properties()
 props.load(new FileInputStream(file("configuration.properties")))

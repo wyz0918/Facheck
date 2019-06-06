@@ -24,8 +24,8 @@
     <!-- 用于申请获取蓝牙信息进行室内定位 -->
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.CAMERA"/>
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -50,6 +50,26 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".module.home.RollCallResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.SignInActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.common.CameraActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.common.StartActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,27 +77,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".module.home.RollCallResultActivity"
+            android:name=".module.common.CommonActivity"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name=".module.home.SignInActivity"
+            android:name=".module.common.LoginActivity"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name=".module.common.CameraActivity"
+            android:name=".module.common.RegisterActivity"
             android:screenOrientation="portrait" />
-        <!-- <activity android:name=".module.common.StartActivity"> -->
-        <!-- &lt;!&ndash;<intent-filter>&ndash;&gt; -->
-        <!-- &lt;!&ndash;<action android:name="android.intent.action.MAIN" />&ndash;&gt; -->
-
-
-        <!-- &lt;!&ndash;<category android:name="android.intent.category.LAUNCHER" />&ndash;&gt; -->
-        <!-- &lt;!&ndash;</intent-filter>&ndash;&gt; -->
-        <!-- </activity> -->
-        <!-- <activity android:name=".module.common.LoginActivity" /> -->
-        <!-- <activity android:name=".module.common.RegisterActivity" /> -->
-        <!-- <activity android:name=".module.common.GetNewPassActivity"></activity> -->
+        <activity
+            android:name=".module.common.GetNewPassActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.CreateClassActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".module.home.ClassPageActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".module.home.StudentinfoActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

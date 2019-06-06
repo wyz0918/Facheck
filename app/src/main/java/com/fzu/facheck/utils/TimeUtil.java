@@ -21,7 +21,7 @@ public class TimeUtil {
      *
      * @return 年月日
      */
-    private static String formatDate(Date date) {
+    public static String formatDate(Date date) {
         return formatDate.format(date);
     }
 

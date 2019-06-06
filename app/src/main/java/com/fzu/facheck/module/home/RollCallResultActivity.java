@@ -47,8 +47,8 @@ import rx.schedulers.Schedulers;
 public class RollCallResultActivity extends RxBaseActivity {
 
     String TAG = "RollCallResult";
-    @BindView(R.id.navigation)
-    BottomNavigationView bottomNavigationView;
+//    @BindView(R.id.navigation)
+//    BottomNavigationView bottomNavigationView;
     @BindView(R.id.toolbar_title)
     TextView mToolbarTitle;
     @BindView(R.id.toolbar)

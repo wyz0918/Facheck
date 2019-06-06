@@ -4,12 +4,16 @@ import android.Manifest;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
+import com.fzu.facheck.module.home.HomeClassPageFragment;
 import com.fzu.facheck.module.home.HomePageFragment;
+import com.fzu.facheck.module.home.MyPageFragment;
 import com.fzu.facheck.utils.ConstantUtil;
 
 import java.util.List;
@@ -25,6 +29,10 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
 
     @BindView(R.id.navigation)
     BottomNavigationView bottomNavigationView;
+
+    private Fragment[] fragments;
+    private int currentTabIndex;
+    private int index;
 
     private TextView mTextMessage;
 
@@ -76,11 +84,13 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
      */
     private void initFragments() {
         mHomePageFragment = HomePageFragment.newInstance();
-
-//        fragments = new Fragment[]{
-//                mHomePageFragment,
-//
-//        };
+        HomeClassPageFragment homeClassPageFragment=HomeClassPageFragment.newInstance();
+        MyPageFragment myPageFragment=MyPageFragment.newInstance();
+        fragments = new Fragment[]{
+                mHomePageFragment,
+                homeClassPageFragment,
+                myPageFragment
+        };
         // 添加显示第一个fragment
         getSupportFragmentManager()
                 .beginTransaction()
@@ -96,6 +106,17 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.navigation_home:
+                changeFragmentIndex(menuItem,0);
+                return true;
+            case R.id.navigation_dashboard:
+                changeFragmentIndex(menuItem,1);
+                return true;
+            case R.id.navigation_notifications:
+                changeFragmentIndex(menuItem,2);
+                return true;
+        }
         return false;
     }
 
@@ -119,7 +140,19 @@ public class MainActivity extends RxBaseActivity implements BottomNavigationView
                 .setNegativeButton("否")
                 .build()
                 .show();
-
-
+    }
+    private void switchFragment() {
+        FragmentTransaction trx = getSupportFragmentManager().beginTransaction();
+        trx.hide(fragments[currentTabIndex]);
+        if (!fragments[index].isAdded()) {
+            trx.add(R.id.container, fragments[index]);
+        }
+        trx.show(fragments[index]).commit();
+        currentTabIndex = index;
+    }
+    private void changeFragmentIndex(MenuItem item, int currentIndex) {
+        index = currentIndex;
+        switchFragment();
+        item.setChecked(true);
     }
 }

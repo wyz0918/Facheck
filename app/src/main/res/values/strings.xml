@@ -4,7 +4,6 @@
     <string name="cancel">取消</string>
 
 
-
     <string name="title_home">点名</string>
     <string name="title_class">班级</string>
     <string name="title_myinfo">我的</string>
@@ -28,8 +27,6 @@
     <string name="upload_photo">请上传自拍照进行签到：</string>
     <string name="upload_photo_tips">拍照提示：</string>
     <string name="upload_photo_tips_details">1、请将摄像头对准脸部。\n2、不要遮挡脸部。\n3、请在光线充足的条件下拍照。</string>
-
-
 
 
 </resources>
