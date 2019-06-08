@@ -32,7 +32,7 @@ public class StartActivity extends RxBaseActivity {
         GradientDrawable myGrad= (GradientDrawable) regiterbtn.getBackground();
         myGrad.setColor(Color.parseColor("#B0E0E6"));
         myGrad=(GradientDrawable)loginbtn.getBackground();
-        myGrad.setColor(Color.parseColor("#00CDCD"));
+        myGrad.setColor(Color.parseColor("#6ACCBD"));
     }
 
     @Override

@@ -20,7 +20,7 @@
         android:background="@drawable/layer_list_draw"
         android:textSize="18sp"
         android:digits="0123456789"
-        android:textColor="#CDCDC1"
+        android:textColor="@color/black_80"
         android:maxLength="11"
         android:layout_marginHorizontal="25dp"
         android:hint="  手机号"/>
@@ -39,7 +39,7 @@
         android:background="@drawable/layer_list_draw"
         android:textSize="18sp"
         android:digits="0123456789abcdefghijklmnopqrstuvwxyz"
-        android:textColor="#CDCDC1"
+        android:textColor="@color/black_80"
         android:inputType="textPassword"
         android:maxLength="15"
         android:layout_marginHorizontal="25dp"

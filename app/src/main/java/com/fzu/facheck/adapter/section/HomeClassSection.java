@@ -22,6 +22,8 @@ import com.fzu.facheck.entity.RollCall.RollCallInfo;
 import com.fzu.facheck.module.home.RollCallResultActivity;
 import com.fzu.facheck.module.home.SignInActivity;
 import com.fzu.facheck.network.RetrofitHelper;
+import com.fzu.facheck.utils.ConstantUtil;
+import com.fzu.facheck.utils.PreferenceUtil;
 import com.fzu.facheck.utils.RxTimerUtil;
 import com.fzu.facheck.widget.sectioned.StatelessSection;
 
@@ -48,7 +50,6 @@ public class HomeClassSection extends StatelessSection {
     private ArrayList<String> minutes = new ArrayList<>();
     private int rollCallTime;
     private OptionsPickerView pvOptions;
-    private int mBtn_status = 0;
     private JSONObject jsonObject;
 
 
@@ -58,6 +59,7 @@ public class HomeClassSection extends StatelessSection {
     private AMapLocationClientOption mLocationOption;
 
     private String mRecordId;
+
 
     String TAG = "Home";
 
@@ -96,15 +98,15 @@ public class HomeClassSection extends StatelessSection {
                 itemViewHolder.mClassDuration.setText(getDtime(joinedClassDataBean.getJoinedClassTime()));
                 if (joinedClassDataBean.isSignable()) {
                     itemViewHolder.mBtn.setText(R.string.not_signed_in);
-                    itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
+                    itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
 
                     itemViewHolder.mBtn.setOnClickListener(v -> {
 
                         Intent intent = new Intent(mContext, SignInActivity.class);
+                        mRecordId = PreferenceUtil.getString(jointedData.get(position).getJoinedClassId(),"wrong");
 
-
-                        intent.putExtra("record_id","00000001");
-                        intent.putExtra("class_title","高等数学");
+                        intent.putExtra("record_id",mRecordId);
+                        intent.putExtra("class_title",itemViewHolder.mClassName.getText());
 
                         mContext.startActivity(intent);
 
@@ -113,7 +115,7 @@ public class HomeClassSection extends StatelessSection {
 
                 } else {
                     itemViewHolder.mBtn.setText(R.string.signed_in);
-                    itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
+                    itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
 
                 }
                 break;
@@ -122,13 +124,11 @@ public class HomeClassSection extends StatelessSection {
                 itemViewHolder.mClassName.setText(managedClassData.getManagedClassName());
                 itemViewHolder.mClassDuration.setText(getDtime(managedClassData.getManagedClassTime()));
                 if (managedClassData.isAbleRollCall()) {
-                    mBtn_status = 0;
                     itemViewHolder.mBtn.setText(R.string.roll_call_on);
                     itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_green);
 
 
                 } else {
-                    mBtn_status = 1;
                     itemViewHolder.mBtn.setText(R.string.roll_call_off);
                     itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
 
@@ -136,17 +136,16 @@ public class HomeClassSection extends StatelessSection {
 
                 itemViewHolder.mBtn.setOnClickListener(v -> {
 
-                    if (mBtn_status == 0) {
+                    if (createdData.get(position).isAbleRollCall()) {
                         initOptionPicker(position,itemViewHolder);
                     }else{
                         Intent intent = new Intent(mContext, RollCallResultActivity.class);
 
-                        Log.i(TAG, "onBindItemViewHolder: "+mRecordId);
-//                        intent.putExtra("record_id",mRecordId);
-//                        intent.putExtra("class_title",itemViewHolder.mClassName.getText());
 
-                        intent.putExtra("record_id","00000001");
-                        intent.putExtra("class_title","高等数学");
+                        mRecordId = PreferenceUtil.getString(createdData.get(position).getManagedClassId(),"wrong");
+                        intent.putExtra("record_id",mRecordId);
+                        intent.putExtra("class_title",itemViewHolder.mClassName.getText());
+                        Log.i(TAG, "onBindItemViewHolder: "+mRecordId);
 
                         mContext.startActivity(intent);
                         itemViewHolder.mBtn.setText(R.string.roll_call_on);
@@ -273,11 +272,19 @@ public class HomeClassSection extends StatelessSection {
 
                     if (resultBeans.getCode().equals("0700")) {
 
-                        mRecordId = resultBeans.getRecordId();
+
+                        PreferenceUtil.put(createdData.get(position).getManagedClassId(), resultBeans.getRecordId());
+
                         itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_blue);
                         itemViewHolder.mBtn.setText(R.string.roll_calling);
-                        RxTimerUtil.timer(rollCallTime, number -> itemViewHolder.mBtn.setText(R.string.roll_call_off));
-                        mBtn_status = 1;
+                        RxTimerUtil.timer(rollCallTime, number -> {
+                                    itemViewHolder.mBtn.setText(R.string.roll_call_off);
+                                    itemViewHolder.mBtn.setBackgroundResource(R.drawable.btn_rollcall_gray);
+
+                                }
+                               );
+
+                        createdData.get(position).setAbleRollCall(false);
 
                     } else {
 

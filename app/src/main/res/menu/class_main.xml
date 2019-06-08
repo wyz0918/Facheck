@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:appNs="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/creat_class"
         android:orderInCategory="80"
+        android:icon="@drawable/ic_create"
         android:title="创建班级"
-        appNs:showAsAction="never"/>
+        app:showAsAction="withText"/>
     <item
         android:id="@+id/add_class"
         android:orderInCategory="80"
+        android:icon="@drawable/ic_joint"
         android:title="加入班级"
-        appNs:showAsAction="never"/>
+        app:showAsAction="withText"/>
+
 </menu>

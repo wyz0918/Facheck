@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxLazyFragment;
 import com.fzu.facheck.module.common.CommonActivity;
+import com.fzu.facheck.utils.ConstantUtil;
+import com.fzu.facheck.utils.PreferenceUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -66,6 +68,7 @@ public class MyPageFragment extends RxLazyFragment {
                 startActivity(intent);
                 break;
             case R.id.exitlogin:
+                PreferenceUtil.putBoolean(ConstantUtil.KEY, false);
                 getActivity().finish();
                 break;
         }

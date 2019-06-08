@@ -16,6 +16,8 @@ import com.fzu.facheck.R;
 import com.fzu.facheck.base.RxBaseActivity;
 import com.fzu.facheck.entity.RollCall.StateInfo;
 import com.fzu.facheck.network.RetrofitHelper;
+import com.fzu.facheck.utils.ConstantUtil;
+import com.fzu.facheck.utils.PreferenceUtil;
 import com.fzu.facheck.utils.ToastUtil;
 import com.fzu.facheck.widget.CircleProgressView;
 
@@ -129,6 +131,9 @@ public class LoginActivity extends RxBaseActivity {
                                     hideProgressBar();
                                     if(stateInfo.code.equals("0100")){
                                         //登入成功，启动主页面
+                                        PreferenceUtil.putBoolean(ConstantUtil.KEY, true);
+                                        PreferenceUtil.put(ConstantUtil.PHONE_NUMBER, un);
+
                                         saveData(un,pw,"小明");
                                         Intent intent=new Intent(LoginActivity.this,MainActivity.class);
                                         startActivity(intent);

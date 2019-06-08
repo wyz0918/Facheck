@@ -251,7 +251,9 @@ public class RollCallResultActivity extends RxBaseActivity {
 
         mCustomEmptyView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.GONE);
-        mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error_load);
+        mPieChart.setVisibility(View.GONE);
+        hideProgressBar();
+        mCustomEmptyView.setEmptyImage(R.drawable.img_tips_error);
         mCustomEmptyView.setEmptyText("加载失败!");
         SnackbarUtil.showMessage(mRecyclerView, "数据加载失败,请重新加载或者检查网络是否链接");
     }

@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="37sp"
             android:layout_marginTop="2dp"
-            android:background="#E0EEE0"
+            android:background="@color/subColorPrimary"
             android:textSize="18sp"
             android:digits="0123456789"
             android:textColor="#CDCDC1"
@@ -48,6 +48,6 @@
             android:text="获取验证码"
             android:layout_height="37sp"
             android:layout_marginRight="25dp"
-            android:background="#00CDCD"/>
+            android:background="@color/colorPrimary"/>
     </LinearLayout>
 </LinearLayout>

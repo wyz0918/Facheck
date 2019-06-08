@@ -48,14 +48,16 @@
             </android.support.v7.widget.RecyclerView>
 
 
-            <com.fzu.facheck.widget.CustomEmptyView
-                android:id="@+id/empty_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+
 
 
         </LinearLayout>
+
+        <com.fzu.facheck.widget.CustomEmptyView
+            android:id="@+id/empty_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
 
     </LinearLayout>

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,6 +27,8 @@ import com.fzu.facheck.widget.sectioned.SectionedRecyclerViewAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Method;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -68,10 +71,29 @@ public class HomeClassPageFragment extends RxLazyFragment {
         ((MainActivity)getActivity()).setSupportActionBar(mToolbar);
     }
 
+
+
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.class_main,menu);
     }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (menu != null) {
+            if (menu.getClass() == MenuBuilder.class) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (Exception e) {
+                }
+            }
+        }
+        super.onPrepareOptionsMenu(menu);
+    }
+
 
     public static HomeClassPageFragment newInstance() {
         return new HomeClassPageFragment();
